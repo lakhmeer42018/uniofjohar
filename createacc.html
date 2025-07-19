@@ -104,8 +104,8 @@
   form.addEventListener('submit', function(e) {
     e.preventDefault();
 
-    const email = document.getElementById('email').value;
-    const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value.trim();
+    const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
 
@@ -114,11 +114,17 @@
       return;
     }
 
+    // Check if username already exists
+    if (localStorage.getItem('university_user_' + username)) {
+      alert('⚠️ Username already exists. Please choose a different one.');
+      return;
+    }
+
     // Save user data to localStorage
     const userData = { email, username, password };
     localStorage.setItem('university_user_' + username, JSON.stringify(userData));
 
-    // ✅ Send email using corrected variable names
+    // ✅ Send email using EmailJS
     emailjs.send("service_v8t84qz", "template_raik5ek", {
       email: email,        
       to_name: username
@@ -136,8 +142,7 @@
       }
     );
   });
-</script>
-
+  </script>
 
   <!-- Bootstrap Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
